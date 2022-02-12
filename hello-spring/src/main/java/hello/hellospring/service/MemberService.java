@@ -25,9 +25,11 @@ public class MemberService {
     }
 
     private void validateDuplicateMember(Member member) {
-        repository.findById(member.getId()).ifPresent(m -> {
-            throw new IllegalStateException("already exists");
-        });
+        if (member.getId() != null) {
+            repository.findById(member.getId()).ifPresent(m -> {
+                throw new IllegalStateException("already exists");
+            });
+        }
     }
 
     public List<Member> findMembers() {
