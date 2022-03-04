@@ -3,6 +3,9 @@ package hello.core.scope;
 import lombok.RequiredArgsConstructor;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Scope;
 
@@ -35,15 +38,17 @@ public class SingletonWithPrototypeTest1 {
 
         ClientBean client2 = applicationContext.getBean(ClientBean.class);
         int cnt2 = client2.logic();
-        assertThat(cnt2).isEqualTo(2);
+        assertThat(cnt2).isEqualTo(1);
     }
 
     @Scope("singleton")
-    @RequiredArgsConstructor
     static class ClientBean {
-        private final PrototypeBean prototypeBean;
+        @Autowired
+        private ObjectProvider<PrototypeBean> prototypeBeanProvider;
+//        private ObjectFactory<PrototypeBean> prototypeBeanProvider;
 
         public int logic() {
+            PrototypeBean prototypeBean = prototypeBeanProvider.getObject();
             prototypeBean.addCnt();
             return prototypeBean.getCnt();
         }
