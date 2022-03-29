@@ -8,9 +8,9 @@
 <h1>컨텐츠에 데이터 출력하기</h1>
 <ul>
     <li>th:text 사용 <span th:text="${data}"></span></li>
-    <li>th:text 사용 <span th:utext="${data}"></span></li>
-    <li>컨텐츠 안에서 직접 출력하기 = [[${data}]]</li>
-    <li>컨텐츠 안에서 직접 출력하기 = [(${data})]</li>
+    <li>th:utext 사용 <span th:utext="${data}"></span></li>
+    <li>컨텐츠 안에서 직접 출력하기 (escaped) = [[${data}]]</li>
+    <li>컨텐츠 안에서 직접 출력하기 (unescaped) = [(${data})]</li>
 </ul>
 </body>
 </html>
