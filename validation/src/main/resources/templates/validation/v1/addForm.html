@@ -44,7 +44,7 @@
         <div>
             <label for="quantity" th:text="#{label.item.quantity}">수량</label>
             <input type="text" id="quantity" th:field="*{quantity}" class="form-control"
-                   th:class="${errors.containsKey('quantity')} ? 'form-control field-error' : 'form-control'"placeholder="수량을 입력하세요">
+                   th:class="${errors?.containsKey('quantity')} ? 'form-control field-error' : 'form-control'" placeholder="수량을 입력하세요">
             <div class="field-error" th:if="${errors?.containsKey('quantity')}" th:text="${errors.quantity}">수량 오류</div>
         </div>
 
