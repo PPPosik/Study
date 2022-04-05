@@ -1,4 +1,4 @@
-package hello.itemservice.validation;
+package hello.itemservice.domain.item.validation;
 
 import hello.itemservice.domain.item.Item;
 import org.junit.jupiter.api.Test;
