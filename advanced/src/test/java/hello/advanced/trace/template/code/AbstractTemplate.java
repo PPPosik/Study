@@ -10,5 +10,5 @@ public abstract class AbstractTemplate {
         log.info("resultTime={}", System.currentTimeMillis() - startTime);
     }
 
-    abstract void call();
+    protected abstract void call();
 }
