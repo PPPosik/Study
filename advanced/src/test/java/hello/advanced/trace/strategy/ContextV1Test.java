@@ -37,4 +37,19 @@ public class ContextV1Test {
         ContextV1 contextV2 = new ContextV1(strategyLogic2);
         contextV2.execute();
     }
+
+    @Test
+    void strategyV2() {
+        Strategy strategyLogic1 = () -> log.info("call logic1");
+        Strategy strategyLogic2 = () -> log.info("call logic2");
+
+        new ContextV1(strategyLogic1).execute();
+        new ContextV1(strategyLogic2).execute();
+    }
+
+    @Test
+    void strategyV3() {
+        new ContextV1(() -> log.info("call logic1")).execute();
+        new ContextV1(() -> log.info("call logic2")).execute();
+    }
 }
