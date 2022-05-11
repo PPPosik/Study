@@ -1,4 +1,4 @@
-package com.example.aop.order.aop.member;
+package com.example.aop.member;
 
 public interface MemberService {
     String hello(String param);
