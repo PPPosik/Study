@@ -1,5 +1,6 @@
 package com.example.aop.exam;
 
+import com.example.aop.exam.annotation.Retry;
 import com.example.aop.exam.annotation.Trace;
 import org.springframework.stereotype.Repository;
 
@@ -8,6 +9,7 @@ public class ExamRepository {
     private static int seq = 0;
 
     @Trace
+    @Retry(value = 5)
     public String save(String itemId) {
         seq++;
         if (seq % 5 == 0) {
