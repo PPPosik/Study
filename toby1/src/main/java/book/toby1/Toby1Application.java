@@ -1,5 +1,6 @@
 package book.toby1;
 
+import book.toby1.user.dao.DUserDao;
 import book.toby1.user.dao.UserDao;
 import book.toby1.user.domain.User;
 import org.springframework.boot.SpringApplication;
@@ -13,7 +14,7 @@ public class Toby1Application {
 	public static void main(String[] args) throws SQLException, ClassNotFoundException {
 		SpringApplication.run(Toby1Application.class, args);
 
-		UserDao dao = new UserDao();
+		UserDao dao = new DUserDao();
 		User user = new User();
 		user.setId("1");
 		user.setName("AAA");
