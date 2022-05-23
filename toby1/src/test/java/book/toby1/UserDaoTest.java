@@ -1,6 +1,7 @@
 package book.toby1;
 
 import book.toby1.user.dao.DConnectionMaker;
+import book.toby1.user.dao.DaoFactory;
 import book.toby1.user.dao.UserDao;
 import book.toby1.user.domain.User;
 import org.junit.jupiter.api.Test;
@@ -10,7 +11,7 @@ import java.sql.SQLException;
 public class UserDaoTest {
     @Test
     void addAndFindTest() throws SQLException, ClassNotFoundException {
-        UserDao dao = new UserDao(new DConnectionMaker());
+        UserDao dao = new DaoFactory().userDao();
         User user = new User();
         user.setId("1");
         user.setName("AAA");
