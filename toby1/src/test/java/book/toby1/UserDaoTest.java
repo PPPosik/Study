@@ -5,13 +5,17 @@ import book.toby1.user.dao.DaoFactory;
 import book.toby1.user.dao.UserDao;
 import book.toby1.user.domain.User;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.sql.SQLException;
 
 public class UserDaoTest {
     @Test
     void addAndFindTest() throws SQLException, ClassNotFoundException {
-        UserDao dao = new DaoFactory().userDao();
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(DaoFactory.class);
+        UserDao dao = applicationContext.getBean("userDao", UserDao.class);
+
         User user = new User();
         user.setId("1");
         user.setName("AAA");
