@@ -14,8 +14,13 @@ public class UserDaoTest {
     @Test
     void addAndFindTest() throws SQLException, ClassNotFoundException {
         ApplicationContext applicationContext = new AnnotationConfigApplicationContext(DaoFactory.class);
-        UserDao dao = applicationContext.getBean("userDao", UserDao.class);
 
+        UserDao dao1 = applicationContext.getBean("userDao", UserDao.class);
+        UserDao dao2 = applicationContext.getBean("userDao", UserDao.class);
+        System.out.println("dao1 = " + dao1);
+        System.out.println("dao2 = " + dao2);
+
+        UserDao dao = applicationContext.getBean("userDao", UserDao.class);
         User user = new User();
         user.setId("1");
         user.setName("AAA");
