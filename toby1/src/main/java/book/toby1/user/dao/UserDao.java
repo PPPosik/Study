@@ -1,6 +1,7 @@
 package book.toby1.user.dao;
 
 import book.toby1.user.domain.User;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.sql.*;
 
@@ -8,6 +9,12 @@ public class UserDao {
     private final ConnectionMaker connectionMaker;
 
     public UserDao(ConnectionMaker connectionMaker) {
+        this.connectionMaker = connectionMaker;
+    }
+
+    public UserDao() {
+        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(DaoFactory.class);
+        ConnectionMaker connectionMaker = applicationContext.getBean("connectionMaker", ConnectionMaker.class);
         this.connectionMaker = connectionMaker;
     }
 

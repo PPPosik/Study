@@ -1,8 +1,6 @@
 package book.toby1;
 
-import book.toby1.user.dao.DConnectionMaker;
-import book.toby1.user.dao.DaoFactory;
-import book.toby1.user.dao.UserDao;
+import book.toby1.user.dao.*;
 import book.toby1.user.domain.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
@@ -32,5 +30,18 @@ public class UserDaoTest {
         User findUser = dao.get(user.getId());
         System.out.println("findUser.getName() = " + findUser.getName());
         System.out.println("findUser.getPassword() = " + findUser.getPassword());
+    }
+
+    @Test
+    void countingConnectionMakerTest() throws SQLException, ClassNotFoundException {
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(CountingDaoFactory.class);
+
+        UserDao dao = applicationContext.getBean("userDao", UserDao.class);
+        dao.get("1");
+        dao.get("1");
+        dao.get("1");
+
+        CountingConnectionMaker connectionMaker = applicationContext.getBean("connectionMaker", CountingConnectionMaker.class);
+        System.out.println("connectionMaker.getCounter() = " + connectionMaker.getCounter());
     }
 }
