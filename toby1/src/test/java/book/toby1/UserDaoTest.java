@@ -5,6 +5,7 @@ import book.toby1.user.domain.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
 
 import java.sql.SQLException;
 
@@ -43,5 +44,13 @@ public class UserDaoTest {
 
         CountingConnectionMaker connectionMaker = applicationContext.getBean("connectionMaker", CountingConnectionMaker.class);
         System.out.println("connectionMaker.getCounter() = " + connectionMaker.getCounter());
+    }
+
+    @Test
+    void xmlConfigurationTest() throws SQLException, ClassNotFoundException {
+        ApplicationContext applicationContext = new GenericXmlApplicationContext("applicationContext.xml");
+
+        UserDao dao = applicationContext.getBean("userDao", UserDao.class);
+        dao.get("1");
     }
 }

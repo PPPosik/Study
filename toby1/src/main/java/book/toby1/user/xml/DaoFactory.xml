@@ -1,0 +1,7 @@
+<beans>
+    <bean id="dConnectionMaker" class="book.toby1.user.dao.DConnectionMaker" />
+    <bean id="nConnectionMaker" class="book.toby1.user.dao.NConnectionMaker" />
+    <bean id="userDao" class="book.toby1.user.dao.UserDao">
+        <property name="connectionMaker" ref="nConnectionMaker"/>
+    </bean>
+</beans>
