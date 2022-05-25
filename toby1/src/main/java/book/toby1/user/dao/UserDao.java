@@ -1,29 +1,26 @@
 package book.toby1.user.dao;
 
 import book.toby1.user.domain.User;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import javax.sql.DataSource;
 import java.sql.*;
 
 public class UserDao {
-    private ConnectionMaker connectionMaker;
-
-    public UserDao(ConnectionMaker connectionMaker) {
-        this.connectionMaker = connectionMaker;
-    }
+    private DataSource dataSource;
 
     public UserDao() {
-        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(DaoFactory.class);
-        ConnectionMaker connectionMaker = applicationContext.getBean("connectionMaker", ConnectionMaker.class);
-        this.connectionMaker = connectionMaker;
     }
 
-    public void setConnectionMaker(ConnectionMaker connectionMaker) {
-        this.connectionMaker = connectionMaker;
+    public UserDao(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
-    public void add(User user) throws ClassNotFoundException, SQLException {
-        Connection connection = connectionMaker.makeConnection();
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    public void add(User user) throws SQLException {
+        Connection connection = dataSource.getConnection();
         PreparedStatement ps = connection.prepareStatement("insert into users(id, name, password) values (?, ?, ?)");
 
         ps.setString(1, user.getId());
@@ -36,8 +33,8 @@ public class UserDao {
         connection.close();
     }
 
-    public User get(String id) throws ClassNotFoundException, SQLException {
-        Connection connection = connectionMaker.makeConnection();
+    public User get(String id) throws SQLException {
+        Connection connection = dataSource.getConnection();
         PreparedStatement ps = connection.prepareStatement("select * from users where id = ?");
 
         ps.setString(1, id);

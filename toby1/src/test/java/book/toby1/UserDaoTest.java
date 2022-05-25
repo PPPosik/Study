@@ -11,7 +11,7 @@ import java.sql.SQLException;
 
 public class UserDaoTest {
     @Test
-    void addAndFindTest() throws SQLException, ClassNotFoundException {
+    void addAndFindTest() throws SQLException {
         ApplicationContext applicationContext = new AnnotationConfigApplicationContext(DaoFactory.class);
 
         UserDao dao1 = applicationContext.getBean("userDao", UserDao.class);
@@ -34,7 +34,7 @@ public class UserDaoTest {
     }
 
     @Test
-    void countingConnectionMakerTest() throws SQLException, ClassNotFoundException {
+    void countingConnectionMakerTest() throws SQLException {
         ApplicationContext applicationContext = new AnnotationConfigApplicationContext(CountingDaoFactory.class);
 
         UserDao dao = applicationContext.getBean("userDao", UserDao.class);
@@ -47,7 +47,7 @@ public class UserDaoTest {
     }
 
     @Test
-    void xmlConfigurationTest() throws SQLException, ClassNotFoundException {
+    void xmlConfigurationTest() throws SQLException {
         ApplicationContext applicationContext = new GenericXmlApplicationContext("applicationContext.xml");
 
         UserDao dao = applicationContext.getBean("userDao", UserDao.class);
