@@ -2,12 +2,15 @@ package book.toby1;
 
 import book.toby1.user.dao.*;
 import book.toby1.user.domain.User;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 
 import java.sql.SQLException;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserDaoTest {
     @Test
@@ -29,8 +32,10 @@ public class UserDaoTest {
         System.out.println(user.getId() + " 등록");
 
         User findUser = dao.get(user.getId());
-        System.out.println("findUser.getName() = " + findUser.getName());
-        System.out.println("findUser.getPassword() = " + findUser.getPassword());
+
+        assertThat(findUser.getId().equals(user.getId()));
+        assertThat(findUser.getPassword().equals(user.getPassword()));
+        assertThat(findUser.getName().equals(user.getName()));
     }
 
     @Test
