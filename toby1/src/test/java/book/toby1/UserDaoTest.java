@@ -16,28 +16,21 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class UserDaoTest {
     private UserDao dao;
+    private User user1;
+    private User user2;
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws SQLException {
         ApplicationContext applicationContext = new AnnotationConfigApplicationContext(DaoFactory.class);
         dao = applicationContext.getBean("userDao", UserDao.class);
+        dao.deleteAll();
+
+        user1 = new User("1", "AAA", "aaa");
+        user2 = new User("2", "BBB", "bbb");
     }
 
     @Test
     void addAndGetTest() throws SQLException {
-        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(DaoFactory.class);
-
-        UserDao dao1 = applicationContext.getBean("userDao", UserDao.class);
-        UserDao dao2 = applicationContext.getBean("userDao", UserDao.class);
-        System.out.println("dao1 = " + dao1);
-        System.out.println("dao2 = " + dao2);
-
-        UserDao dao = applicationContext.getBean("userDao", UserDao.class);
-        User user1 = new User("1", "AAA", "aaa");
-        User user2 = new User("2", "BBB", "bbb");
-
-        dao.deleteAll();
-
         dao.add(user1);
         dao.add(user2);
 
@@ -55,53 +48,35 @@ public class UserDaoTest {
     @Test
     void countingConnectionMakerTest() throws SQLException {
         ApplicationContext applicationContext = new AnnotationConfigApplicationContext(CountingDaoFactory.class);
-
         UserDao dao = applicationContext.getBean("userDao", UserDao.class);
-        User user = new User("1", "AAA", "aaa");
 
-        dao.deleteAll();
-        dao.add(user);
+        dao.add(user1);
 
         dao.get("1");
         dao.get("1");
         dao.get("1");
 
         CountingConnectionMaker connectionMaker = applicationContext.getBean("connectionMaker", CountingConnectionMaker.class);
-        System.out.println("connectionMaker.getCounter() = " + connectionMaker.getCounter());
+        assertThat(connectionMaker.getCounter()).isEqualTo(3);
     }
 
     @Test()
-    void getFail() throws SQLException {
-        ApplicationContext applicationContext = new GenericXmlApplicationContext("applicationContext.xml");
-        UserDao dao = applicationContext.getBean("userDao", UserDao.class);
-
-        dao.deleteAll();
-
+    void getFail() {
         assertThrows(EmptyResultDataAccessException.class, () -> dao.get("1"));
     }
 
     @Test
     void xmlConfigurationTest() throws SQLException {
         ApplicationContext applicationContext = new GenericXmlApplicationContext("applicationContext.xml");
-
         UserDao dao = applicationContext.getBean("userDao", UserDao.class);
-        User user = new User("1", "AAA", "aaa");
 
-        dao.deleteAll();
-        dao.add(user);
+        dao.add(user1);
         dao.get("1");
     }
 
     @Test
     void deleteTest() throws SQLException {
-        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(DaoFactory.class);
-
-        UserDao dao = applicationContext.getBean("userDao", UserDao.class);
-        User user = new User("1", "AAA", "aaa");
-
-        dao.deleteAll();
-
-        dao.add(user);
+        dao.add(user1);
         assertThat(dao.getCount()).isEqualTo(1);
 
         dao.deleteAll();
@@ -110,17 +85,11 @@ public class UserDaoTest {
 
     @Test
     void getCountTest() throws SQLException {
-        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(DaoFactory.class);
-
-        UserDao dao = applicationContext.getBean("userDao", UserDao.class);
-
-        dao.deleteAll();
-
         assertThat(dao.getCount()).isEqualTo(0);
-        User user1 = new User("1", "AAA", "aaa");
+
         dao.add(user1);
         assertThat(dao.getCount()).isEqualTo(1);
-        User user2 = new User("2", "BBB", "bbb");
+
         dao.add(user2);
         assertThat(dao.getCount()).isEqualTo(2);
     }
