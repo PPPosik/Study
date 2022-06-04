@@ -16,7 +16,7 @@ public class Member {
     private String username;
 
     // 기본 매핑 사용
-   private Integer age;
+    private Integer age;
 
     public String getId() {
         return id;
