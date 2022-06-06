@@ -4,24 +4,33 @@ import book.toby1.user.dao.*;
 import book.toby1.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.sql.SQLException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@SpringBootTest
+@ContextConfiguration(locations = "/applicationContext.xml")
 public class UserDaoTest {
+    @Autowired
+    ApplicationContext applicationContext;
+
     private UserDao dao;
     private User user1;
     private User user2;
 
     @BeforeEach
     public void setUp() throws SQLException {
-        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(DaoFactory.class);
+        System.out.println("applicationContext = " + applicationContext);
+        System.out.println("this = " + this);
         dao = applicationContext.getBean("userDao", UserDao.class);
         dao.deleteAll();
 
