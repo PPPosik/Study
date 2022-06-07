@@ -21,17 +21,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @ContextConfiguration(locations = "/applicationContext.xml")
 public class UserDaoTest {
     @Autowired
-    ApplicationContext applicationContext;
-
     private UserDao dao;
+
     private User user1;
     private User user2;
 
     @BeforeEach
     public void setUp() throws SQLException {
-        System.out.println("applicationContext = " + applicationContext);
-        System.out.println("this = " + this);
-        dao = applicationContext.getBean("userDao", UserDao.class);
         dao.deleteAll();
 
         user1 = new User("1", "AAA", "aaa");
