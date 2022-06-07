@@ -60,13 +60,13 @@ public class UserDaoTest {
         UserDao dao = applicationContext.getBean("userDao", UserDao.class);
 
         dao.add(user1);
-
         dao.get("1");
         dao.get("1");
         dao.get("1");
 
-        CountingConnectionMaker connectionMaker = applicationContext.getBean("connectionMaker", CountingConnectionMaker.class);
-        assertThat(connectionMaker.getCounter()).isEqualTo(3);
+        CountingDataSource countingDataSource = applicationContext.getBean("countingDataSource", CountingDataSource.class);
+        System.out.println("countingDataSource = " + countingDataSource);
+        assertThat(countingDataSource.getCounter()).isEqualTo(4);
     }
 
     @Test()

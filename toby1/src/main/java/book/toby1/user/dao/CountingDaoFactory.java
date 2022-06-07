@@ -5,14 +5,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
 import javax.sql.DataSource;
-import java.sql.Driver;
 
 @Configuration
 public class CountingDaoFactory {
     @Bean
     public UserDao userDao() {
 //        return new UserDao(connectionMaker());
-        return new UserDao(dataSource());
+        return new UserDao(countingDataSource());
     }
 
     @Bean
@@ -25,6 +24,11 @@ public class CountingDaoFactory {
         dataSource.setPassword("mysql");
 
         return dataSource;
+    }
+
+    @Bean
+    public DataSource countingDataSource() {
+        return new CountingDataSource(dataSource());
     }
 
     @Bean
