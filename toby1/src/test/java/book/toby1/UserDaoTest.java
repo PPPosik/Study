@@ -10,6 +10,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.datasource.SingleConnectionDataSource;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.sql.SQLException;
@@ -17,10 +19,11 @@ import java.sql.SQLException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@SpringBootTest
-@ContextConfiguration(locations = "/applicationContext.xml")
+//@SpringBootTest
+//@ContextConfiguration(locations = "/test-applicationContext.xml")
+@DirtiesContext
 public class UserDaoTest {
-    @Autowired
+    //    @Autowired
     private UserDao dao;
 
     private User user1;
@@ -28,6 +31,12 @@ public class UserDaoTest {
 
     @BeforeEach
     public void setUp() throws SQLException {
+        dao = new UserDao();
+
+        // test db를 따로 DI 가능
+        SingleConnectionDataSource dataSource = new SingleConnectionDataSource("jdbc:mysql://localhost:3306/toby", "root", "mysql", true);
+        dao.setDataSource(dataSource);
+
         dao.deleteAll();
 
         user1 = new User("1", "AAA", "aaa");
