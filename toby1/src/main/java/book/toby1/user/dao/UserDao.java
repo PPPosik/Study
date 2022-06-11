@@ -110,7 +110,7 @@ public class UserDao {
 
         try {
             connection = dataSource.getConnection();
-            ps = stmt.makePrepatedStatement(connection);
+            ps = stmt.makePreparedStatement(connection);
             ps.executeUpdate();
         } catch (SQLException e) {
             throw e;
