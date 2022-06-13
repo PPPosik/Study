@@ -61,17 +61,18 @@ public class UserDaoTest {
 
     @Test
     void countingConnectionMakerTest() throws SQLException {
+        dao.add(user1);
+
         ApplicationContext applicationContext = new AnnotationConfigApplicationContext(CountingDaoFactory.class);
         UserDao dao = applicationContext.getBean("userDao", UserDao.class);
 
-        dao.add(user1);
         dao.get("1");
         dao.get("1");
         dao.get("1");
 
         CountingDataSource countingDataSource = applicationContext.getBean("countingDataSource", CountingDataSource.class);
         System.out.println("countingDataSource = " + countingDataSource);
-        assertThat(countingDataSource.getCounter()).isEqualTo(4);
+        assertThat(countingDataSource.getCounter()).isEqualTo(3);
     }
 
     @Test()

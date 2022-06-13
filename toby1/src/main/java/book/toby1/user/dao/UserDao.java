@@ -8,6 +8,7 @@ import java.sql.*;
 
 public class UserDao {
     private DataSource dataSource;
+    private JdbcContext jdbcContext;
 
     public UserDao() {
     }
@@ -18,10 +19,12 @@ public class UserDao {
 
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
+        this.jdbcContext = new JdbcContext();
+        this.jdbcContext.setDataSource(dataSource);
     }
 
     public void add(final User user) throws SQLException {
-        jdbcContextWithStatementStrategy(connection -> {
+        this.jdbcContext.workWithStatementStrategy(connection -> {
             PreparedStatement ps = connection.prepareStatement("insert into users(id, name, password) values(?, ?, ?)");
             ps.setString(1, user.getId());
             ps.setString(2, user.getName());
@@ -58,7 +61,7 @@ public class UserDao {
     }
 
     public void deleteAll() throws SQLException {
-        jdbcContextWithStatementStrategy(connection -> connection.prepareStatement("delete from users"));
+        this.jdbcContext.workWithStatementStrategy(connection -> connection.prepareStatement("delete from users"));
     }
 
     public int getCount() throws SQLException {
@@ -83,33 +86,6 @@ public class UserDao {
                 }
             }
 
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                }
-            }
-
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                }
-            }
-        }
-    }
-
-    public void jdbcContextWithStatementStrategy(StatementStrategy stmt) throws SQLException {
-        Connection connection = null;
-        PreparedStatement ps = null;
-
-        try {
-            connection = dataSource.getConnection();
-            ps = stmt.makePreparedStatement(connection);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            throw e;
-        } finally {
             if (ps != null) {
                 try {
                     ps.close();
