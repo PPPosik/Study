@@ -1,5 +1,6 @@
 package book.toby1.template_callback;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -7,11 +8,23 @@ import java.io.IOException;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CalcSumTest {
+    Calculator calculator;
+    String numFilePath;
+
+    @BeforeEach
+    void setUp() {
+        this.calculator = new Calculator();
+        // /out/test/classes/book/toby1/template_callback 에 txt 파일 추가
+        this.numFilePath = getClass().getResource("numbers.txt").getPath();
+    }
+
     @Test
     void sumOfNumbers() throws IOException {
-        Calculator calculator = new Calculator();
-        // classpath에 txt 파일 추가
-        Integer sum = calculator.calcSum(getClass().getResource("./numbers.txt").getPath());
-        assertThat(sum).isEqualTo(15);
+        assertThat(calculator.calcSum(numFilePath)).isEqualTo(15);
+    }
+
+    @Test
+    void multiplyOfNumbers() throws IOException {
+        assertThat(calculator.calcMultiply(numFilePath)).isEqualTo(120);
     }
 }
