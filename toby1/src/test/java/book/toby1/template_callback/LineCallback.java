@@ -1,5 +1,5 @@
 package book.toby1.template_callback;
 
-public interface LineCallback {
-    Integer doSomethingWithLine(String line, Integer value);
+public interface LineCallback<T> {
+    T doSomethingWithLine(String line, T value);
 }
