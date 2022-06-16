@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
+//@org.hibernate.annotations.DynamicUpdate
 @Table(name = "member")
 public class Member {
     @Id

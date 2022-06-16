@@ -44,6 +44,7 @@ public class Start1Application {
 
         Member findMember = entityManager.find(Member.class, "1");
         System.out.println("findMember = " + findMember);
+        System.out.println("findMember.getAge() = " + findMember.getAge());
 
         List<Member> members = entityManager.createQuery("select m from Member m", Member.class).getResultList();
         System.out.println("members.size() = " + members.size());
