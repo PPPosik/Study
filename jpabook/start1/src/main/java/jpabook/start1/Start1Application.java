@@ -1,7 +1,6 @@
 package jpabook.start1;
 
 import jpabook.start1.domain.Member;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import javax.persistence.*;
@@ -14,18 +13,37 @@ public class Start1Application {
 
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpabook");
         EntityManager em = emf.createEntityManager();
+
+//        generalTest(em);
+        MergeTest.mergeTest(emf);
+    }
+
+    private static void generalTest(EntityManager em) {
         EntityTransaction transaction = em.getTransaction();
 
         try {
             transaction.begin();
 //            logic(em);
-            JPQLLogic(em);
+//            JPQLLogic(em);
+            testDetached(em);
             transaction.commit();
         } catch (Exception e) {
             transaction.rollback();
         } finally {
             em.close();
         }
+    }
+
+    private static void testDetached(EntityManager entityManager) {
+        Member member = new Member();
+        member.setId("1");
+        member.setUsername("AAA");
+        member.setAge(20);
+
+        // DB에 반영되지 않음
+        entityManager.persist(member);
+//        entityManager.detach(member);
+        entityManager.clear();
     }
 
     private static void JPQLLogic(EntityManager entityManager) {
