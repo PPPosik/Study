@@ -30,7 +30,7 @@ public class UserDaoTest {
     private User user2;
 
     @BeforeEach
-    public void setUp() throws SQLException {
+    public void setUp() {
         dao = new UserDao();
 
         // test db를 따로 DI 가능
@@ -44,23 +44,25 @@ public class UserDaoTest {
     }
 
     @Test
-    void addAndGetTest() throws SQLException {
+    void addAndGetTest() {
         dao.add(user1);
         dao.add(user2);
 
         User findUser1 = dao.get(user1.getId());
+        assertThat(findUser1).isNotNull();
         assertThat(findUser1.getId()).isEqualTo(user1.getId());
         assertThat(findUser1.getPassword()).isEqualTo(user1.getPassword());
         assertThat(findUser1.getName()).isEqualTo(user1.getName());
 
         User findUser2 = dao.get(user2.getId());
+        assertThat(findUser2).isNotNull();
         assertThat(findUser2.getId()).isEqualTo(user2.getId());
         assertThat(findUser2.getPassword()).isEqualTo(user2.getPassword());
         assertThat(findUser2.getName()).isEqualTo(user2.getName());
     }
 
     @Test
-    void countingConnectionMakerTest() throws SQLException {
+    void countingConnectionMakerTest() {
         dao.add(user1);
 
         ApplicationContext applicationContext = new AnnotationConfigApplicationContext(CountingDaoFactory.class);
@@ -81,7 +83,7 @@ public class UserDaoTest {
     }
 
     @Test
-    void xmlConfigurationTest() throws SQLException {
+    void xmlConfigurationTest() {
         ApplicationContext applicationContext = new GenericXmlApplicationContext("applicationContext.xml");
         UserDao dao = applicationContext.getBean("userDao", UserDao.class);
 
@@ -90,7 +92,7 @@ public class UserDaoTest {
     }
 
     @Test
-    void deleteTest() throws SQLException {
+    void deleteTest() {
         dao.add(user1);
         assertThat(dao.getCount()).isEqualTo(1);
 
@@ -99,7 +101,7 @@ public class UserDaoTest {
     }
 
     @Test
-    void getCountTest() throws SQLException {
+    void getCountTest() {
         assertThat(dao.getCount()).isEqualTo(0);
 
         dao.add(user1);
