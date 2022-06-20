@@ -1,10 +1,14 @@
 package book.toby1.user.dao;
 
 import book.toby1.user.domain.User;
+import book.toby1.user.exception.DuplicateUserIdException;
+import com.mysql.cj.exceptions.MysqlErrorNumbers;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 import javax.sql.DataSource;
+import java.sql.SQLException;
 import java.util.List;
 
 public class UserDao {
@@ -25,6 +29,20 @@ public class UserDao {
     public void add(final User user) {
         this.jdbcTemplate.update("insert into users(id, name, password) values(?, ?, ?)", user.getId(), user.getName(), user.getPassword());
     }
+
+    // 예외를 전환해서 사용
+    // SQLException은 JDBC를 통해 런타임 예외인 DataAccessException으로 포장되어 던져짐
+//    public void addExceptionExample(final User user) throws DuplicateUserIdException {
+//        try {
+//            // SQLException이 발생할 수 있는 코드
+//        } catch (SQLException e) {
+//            if (e.getErrorCode() == MysqlErrorNumbers.ER_DUP_ENTRY) {
+//                throw new DuplicateUserIdException(e);
+//            } else {
+//                throw e;
+//            }
+//        }
+//    }
 
     public User get(String id) {
         return this.jdbcTemplate.queryForObject("select * from users where id = ?", userMapper, id);
