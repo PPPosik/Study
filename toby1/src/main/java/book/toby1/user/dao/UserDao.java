@@ -2,11 +2,14 @@ package book.toby1.user.dao;
 
 import book.toby1.user.domain.User;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 
 import javax.sql.DataSource;
+import java.util.List;
 
 public class UserDao {
     private JdbcTemplate jdbcTemplate;
+    private final RowMapper<User> userMapper = (rs, rowNum) -> new User(rs.getString("id"), rs.getString("name"), rs.getString("password"));
 
     public UserDao() {
     }
@@ -24,13 +27,11 @@ public class UserDao {
     }
 
     public User get(String id) {
-        return this.jdbcTemplate.queryForObject("select * from users where id = ?", (rs, rowNum) -> {
-            User user = new User();
-            user.setId(rs.getString("id"));
-            user.setName(rs.getString("name"));
-            user.setPassword(rs.getString("password"));
-            return user;
-        }, id);
+        return this.jdbcTemplate.queryForObject("select * from users where id = ?", userMapper, id);
+    }
+
+    public List<User> getAll() {
+        return this.jdbcTemplate.query("select * from users order by id", userMapper);
     }
 
     public void deleteAll() {

@@ -15,6 +15,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -28,6 +29,7 @@ public class UserDaoTest {
 
     private User user1;
     private User user2;
+    private User user3;
 
     @BeforeEach
     public void setUp() {
@@ -41,6 +43,7 @@ public class UserDaoTest {
 
         user1 = new User("1", "AAA", "aaa");
         user2 = new User("2", "BBB", "bbb");
+        user3 = new User("3", "CCC", "ccc");
     }
 
     @Test
@@ -109,5 +112,39 @@ public class UserDaoTest {
 
         dao.add(user2);
         assertThat(dao.getCount()).isEqualTo(2);
+    }
+
+    @Test
+    void getAll() {
+        dao.add(user1);
+        List<User> users1 = dao.getAll();
+        assertThat(users1.size()).isEqualTo(1);
+        checkSameUser(user1, users1.get(0));
+
+        dao.add(user2);
+        List<User> users2 = dao.getAll();
+        assertThat(users2.size()).isEqualTo(2);
+        checkSameUser(user1, users2.get(0));
+        checkSameUser(user2, users2.get(1));
+
+        dao.add(user3);
+        List<User> users3 = dao.getAll();
+        assertThat(users3.size()).isEqualTo(3);
+        checkSameUser(user1, users3.get(0));
+        checkSameUser(user2, users3.get(1));
+        checkSameUser(user3, users3.get(2));
+    }
+
+    private void checkSameUser(User user1, User user2) {
+        assertThat(user1.getId()).isEqualTo(user2.getId());
+        assertThat(user1.getName()).isEqualTo(user2.getName());
+        assertThat(user1.getPassword()).isEqualTo(user2.getPassword());
+    }
+
+    @Test
+    void getAllLengthZero() {
+        List<User> users = dao.getAll();
+        assertThat(users).isNotNull();
+        assertThat(users.size()).isEqualTo(0);
     }
 }
