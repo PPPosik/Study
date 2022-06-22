@@ -2,18 +2,20 @@ package book.toby1;
 
 import book.toby1.user.dao.*;
 import book.toby1.user.domain.User;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
+import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ContextConfiguration;
 
+import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -23,9 +25,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 //@SpringBootTest
 //@ContextConfiguration(locations = "/test-applicationContext.xml")
 @DirtiesContext
-public class UserDaoTest {
+public class UserDaoJdbcTest {
     //    @Autowired
     private UserDao dao;
+    private DataSource dataSource;
 
     private User user1;
     private User user2;
@@ -33,11 +36,9 @@ public class UserDaoTest {
 
     @BeforeEach
     public void setUp() {
-        dao = new UserDao();
-
         // test db를 따로 DI 가능
-        SingleConnectionDataSource dataSource = new SingleConnectionDataSource("jdbc:mysql://localhost:3306/toby", "root", "mysql", true);
-        dao.setDataSource(dataSource);
+        this.dataSource = new SingleConnectionDataSource("jdbc:mysql://localhost:3306/toby", "root", "mysql", true);
+        dao = new UserDaoJdbc(dataSource);
 
         dao.deleteAll();
 
@@ -69,7 +70,7 @@ public class UserDaoTest {
         dao.add(user1);
 
         ApplicationContext applicationContext = new AnnotationConfigApplicationContext(CountingDaoFactory.class);
-        UserDao dao = applicationContext.getBean("userDao", UserDao.class);
+        UserDaoJdbc dao = applicationContext.getBean("userDao", UserDaoJdbc.class);
 
         dao.get("1");
         dao.get("1");
@@ -88,7 +89,7 @@ public class UserDaoTest {
     @Test
     void xmlConfigurationTest() {
         ApplicationContext applicationContext = new GenericXmlApplicationContext("applicationContext.xml");
-        UserDao dao = applicationContext.getBean("userDao", UserDao.class);
+        UserDao dao = applicationContext.getBean("userDao", UserDaoJdbc.class);
 
         dao.add(user1);
         dao.get("1");
@@ -146,5 +147,24 @@ public class UserDaoTest {
         List<User> users = dao.getAll();
         assertThat(users).isNotNull();
         assertThat(users.size()).isEqualTo(0);
+    }
+
+    @Test
+    public void duplicateKeyErrorTest() {
+        dao.add(user1);
+//        DataAccessException.class
+        Assertions.assertThrows(DuplicateKeyException.class, () -> dao.add(user1));
+    }
+
+    @Test
+    public void sqlExceptionTranslate() {
+        try {
+            dao.add(user1);
+            dao.add(user1);
+        } catch (DuplicateKeyException e) {
+            SQLException sqlEx = (SQLException) e.getRootCause();
+            SQLErrorCodeSQLExceptionTranslator set = new SQLErrorCodeSQLExceptionTranslator(this.dataSource);
+            assertThat(set.translate(null, null, sqlEx)).isInstanceOf(DuplicateKeyException.class);
+        }
     }
 }

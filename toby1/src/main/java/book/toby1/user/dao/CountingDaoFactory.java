@@ -9,9 +9,9 @@ import javax.sql.DataSource;
 @Configuration
 public class CountingDaoFactory {
     @Bean
-    public UserDao userDao() {
+    public UserDaoJdbc userDao() {
 //        return new UserDao(connectionMaker());
-        return new UserDao(countingDataSource());
+        return new UserDaoJdbc(countingDataSource());
     }
 
     @Bean
