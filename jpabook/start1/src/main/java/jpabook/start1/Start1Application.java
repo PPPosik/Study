@@ -15,7 +15,7 @@ public class Start1Application {
         EntityManager em = emf.createEntityManager();
 
 //        generalTest(em);
-        MergeTest.mergeTest(emf);
+//        MergeTest.mergeTest(emf);
     }
 
     private static void generalTest(EntityManager em) {

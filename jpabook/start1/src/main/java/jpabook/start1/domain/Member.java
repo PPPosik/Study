@@ -1,23 +1,33 @@
 package jpabook.start1.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 //@org.hibernate.annotations.DynamicUpdate
-@Table(name = "member")
+@Table(name = "member", uniqueConstraints = {@UniqueConstraint(name = "NAME_AGE_UNIQUE", columnNames = {"name", "age"})})
 public class Member {
     @Id
-    @Column(name = "id")
+    @Column(name = "id", length = 100) // Specified key was too long; max key length is 1000 bytes, default 255에서 인코딩 방식에 따라 255 * n bytes로 계산됨
     private String id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false, length = 10)
     private String username;
 
     // 기본 매핑 사용
     private Integer age;
+
+    @Enumerated(EnumType.STRING)
+    private RoleType roleType;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastModifiedDate;
+
+    @Lob
+    private String description;
 
     public String getId() {
         return id;
