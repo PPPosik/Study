@@ -1,6 +1,7 @@
 package book.toby1;
 
 import book.toby1.user.dao.*;
+import book.toby1.user.domain.Level;
 import book.toby1.user.domain.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,9 +43,9 @@ public class UserDaoJdbcTest {
 
         dao.deleteAll();
 
-        user1 = new User("1", "AAA", "aaa");
-        user2 = new User("2", "BBB", "bbb");
-        user3 = new User("3", "CCC", "ccc");
+        user1 = new User("1", "AAA", "aaa", Level.BASIC, 1, 0);
+        user2 = new User("2", "BBB", "bbb", Level.SILVER, 55, 10);
+        user3 = new User("3", "CCC", "ccc", Level.GOLD, 100, 40);
     }
 
     @Test
@@ -53,16 +54,9 @@ public class UserDaoJdbcTest {
         dao.add(user2);
 
         User findUser1 = dao.get(user1.getId());
-        assertThat(findUser1).isNotNull();
-        assertThat(findUser1.getId()).isEqualTo(user1.getId());
-        assertThat(findUser1.getPassword()).isEqualTo(user1.getPassword());
-        assertThat(findUser1.getName()).isEqualTo(user1.getName());
-
+        checkSameUser(findUser1, user1);
         User findUser2 = dao.get(user2.getId());
-        assertThat(findUser2).isNotNull();
-        assertThat(findUser2.getId()).isEqualTo(user2.getId());
-        assertThat(findUser2.getPassword()).isEqualTo(user2.getPassword());
-        assertThat(findUser2.getName()).isEqualTo(user2.getName());
+        checkSameUser(findUser2, user2);
     }
 
     @Test
@@ -140,6 +134,9 @@ public class UserDaoJdbcTest {
         assertThat(user1.getId()).isEqualTo(user2.getId());
         assertThat(user1.getName()).isEqualTo(user2.getName());
         assertThat(user1.getPassword()).isEqualTo(user2.getPassword());
+        assertThat(user1.getLevel()).isEqualTo(user2.getLevel());
+        assertThat(user1.getLogin()).isEqualTo(user2.getLogin());
+        assertThat(user1.getRecommend()).isEqualTo(user2.getRecommend());
     }
 
     @Test
@@ -166,5 +163,24 @@ public class UserDaoJdbcTest {
             SQLErrorCodeSQLExceptionTranslator set = new SQLErrorCodeSQLExceptionTranslator(this.dataSource);
             assertThat(set.translate(null, null, sqlEx)).isInstanceOf(DuplicateKeyException.class);
         }
+    }
+
+    @Test
+    public void updateTest() {
+        dao.add(user1);
+        dao.add(user2);
+
+        user1.setName("QQQ");
+        user1.setPassword("qqq");
+        user1.setLevel(Level.GOLD);
+        user1.setLogin(1000);
+        user1.setRecommend(999);
+        dao.update(user1);
+
+        User findUser1 = dao.get(user1.getId());
+        checkSameUser(findUser1, user1);
+
+        User findUser2 = dao.get(user2.getId());
+        checkSameUser(findUser2, user2); // update에 where 절이 정상 동작하는지 테스트
     }
 }
