@@ -1,3 +1,7 @@
+import main.kotlin.Chapter2.chapter227
+import main.kotlin.chapter225
+
 fun main() {
-    println("Hello kotlin")
+//    chapter225()
+    chapter227()
 }
