@@ -1,5 +1,3 @@
-package main.kotlin
-
 fun chapter225() {
     var a = 'a'
     

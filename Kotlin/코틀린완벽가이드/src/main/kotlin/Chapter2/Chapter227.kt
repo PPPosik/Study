@@ -1,5 +1,3 @@
-package main.kotlin.Chapter2
-
 fun chapter227() {
     val x = 1
     val y = 1
