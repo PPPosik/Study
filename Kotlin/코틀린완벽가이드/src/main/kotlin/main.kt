@@ -10,5 +10,9 @@ fun main() {
 
 //    chapter412()
 //    chapter425()
-    chapter433()
+//    chapter433()
+//    chapter441()
+//    chapter443()
+
+    chapter512()
 }
