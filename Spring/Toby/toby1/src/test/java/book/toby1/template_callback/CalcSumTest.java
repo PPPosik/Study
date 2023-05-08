@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -14,8 +16,15 @@ public class CalcSumTest {
     @BeforeEach
     void setUp() {
         this.calculator = new Calculator();
-        // /out/test/classes/book/toby1/template_callback 에 txt 파일 추가
-        this.numFilePath = getClass().getResource("numbers.txt").getPath();
+        /**
+         * /src/main/resources/numbers.txt 를
+         * /out/test/classes/book/toby1/template_callback 에 추가
+         * */
+        try {
+            this.numFilePath = new URI(getClass().getResource("numbers.txt").toString()).getPath();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test

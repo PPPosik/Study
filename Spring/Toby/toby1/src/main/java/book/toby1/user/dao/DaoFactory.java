@@ -6,7 +6,7 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
 import javax.sql.DataSource;
 
-@Configuration
+// @Configuration
 public class DaoFactory {
     @Bean
     public UserDaoJdbc userDao() {

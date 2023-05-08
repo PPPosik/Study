@@ -1,4 +1,4 @@
-package book.toby1;
+package book.toby1.user.dao;
 
 import book.toby1.user.dao.*;
 import book.toby1.user.domain.Level;
