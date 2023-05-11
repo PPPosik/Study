@@ -11,7 +11,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import javax.sql.DataSource;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,11 +33,11 @@ public class UserServiceTest {
     @Before
     public void setUp() {
         users = Arrays.asList(
-                new User("aaa", "AAA", "p1", Level.BASIC, UserService.MIN_LOGCOUNT_FOR_SILVER - 1, 0),
-                new User("bbb", "BBB", "p2", Level.BASIC, UserService.MIN_LOGCOUNT_FOR_SILVER, 0),
-                new User("ccc", "CCC", "p3", Level.SILVER, 60, UserService.MIN_RECCOMEND_FOR_GOLD - 1),
-                new User("ddd", "DDD", "p4", Level.SILVER, 60, UserService.MIN_RECCOMEND_FOR_GOLD),
-                new User("eee", "EEE", "p5", Level.GOLD, 100, 100)
+                new User("aaa", "AAA", "p1", "aaa@aaa", Level.BASIC, UserService.MIN_LOGCOUNT_FOR_SILVER - 1, 0),
+                new User("bbb", "BBB", "p2", "bbb@bbb", Level.BASIC, UserService.MIN_LOGCOUNT_FOR_SILVER, 0),
+                new User("ccc", "CCC", "p3", "ccc@ccc", Level.SILVER, 60, UserService.MIN_RECCOMEND_FOR_GOLD - 1),
+                new User("ddd", "DDD", "p4", "ddd@ddd", Level.SILVER, 60, UserService.MIN_RECCOMEND_FOR_GOLD),
+                new User("eee", "EEE", "p5", "eee@eee", Level.GOLD, 100, 100)
         );
     }
 

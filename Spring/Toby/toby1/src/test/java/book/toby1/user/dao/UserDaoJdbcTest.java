@@ -43,9 +43,9 @@ public class UserDaoJdbcTest {
 
         dao.deleteAll();
 
-        user1 = new User("1", "AAA", "aaa", Level.BASIC, 1, 0);
-        user2 = new User("2", "BBB", "bbb", Level.SILVER, 55, 10);
-        user3 = new User("3", "CCC", "ccc", Level.GOLD, 100, 40);
+        user1 = new User("1", "AAA", "aaa", "aaa@aaa", Level.BASIC, 1, 0);
+        user2 = new User("2", "BBB", "bbb", "bbb@bbb", Level.SILVER, 55, 10);
+        user3 = new User("3", "CCC", "ccc", "ccc@ccc", Level.GOLD, 100, 40);
     }
 
     @Test
@@ -172,6 +172,7 @@ public class UserDaoJdbcTest {
 
         user1.setName("QQQ");
         user1.setPassword("qqq");
+        user1.setEmail("fff@fff");
         user1.setLevel(Level.GOLD);
         user1.setLogin(1000);
         user1.setRecommend(999);
