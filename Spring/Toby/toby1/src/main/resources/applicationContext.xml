@@ -21,9 +21,13 @@
 
     <bean id="mailSender" class="book.toby1.user.service.DummyMailSender" />
 
-    <bean id="userService" class="book.toby1.user.service.UserService">
+    <bean id="userServiceImpl" class="book.toby1.user.service.UserServiceImpl">
         <property name="userDao" ref="userDao" />
-        <property name="transactionManager" ref="transactionManager" />
         <property name="mailSender" ref="mailSender" />
+    </bean>
+
+    <bean id="userService" class="book.toby1.user.service.UserServiceTx">
+        <property name="transactionManager" ref="transactionManager" />
+        <property name="userService" ref="userServiceImpl" />
     </bean>
 </beans>
