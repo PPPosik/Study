@@ -17,7 +17,7 @@ public class TransactionHandler implements InvocationHandler {
         this.target = target;
     }
 
-    public void setPlatformTransactionManager(PlatformTransactionManager transactionManager) {
+    public void setTransactionManager(PlatformTransactionManager transactionManager) {
         this.transactionManager = transactionManager;
     }
 

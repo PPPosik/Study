@@ -26,8 +26,14 @@
         <property name="mailSender" ref="mailSender" />
     </bean>
 
-    <bean id="userService" class="book.toby1.user.service.UserServiceTx">
+    <bean id="userService" class="book.toby1.user.proxy.TxProxyFactoryBean">
+        <property name="target" ref="userServiceImpl" />
         <property name="transactionManager" ref="transactionManager" />
-        <property name="userService" ref="userServiceImpl" />
+        <property name="pattern" value="upgradeLevels" />
+        <property name="serviceInterface" value="book.toby1.user.service.UserService" />
+    </bean>
+
+    <bean id="message" class="book.toby1.learningtest.factoryBean.MessageFactoryBean">
+        <property name="text" value="Factory Bean" />
     </bean>
 </beans>
