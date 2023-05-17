@@ -3,6 +3,7 @@ package book.toby1.user.service;
 import book.toby1.user.dao.UserDao;
 import book.toby1.user.domain.Level;
 import book.toby1.user.domain.User;
+import book.toby1.user.proxy.TransactionHandler;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,6 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import java.lang.reflect.Proxy;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -133,9 +135,16 @@ public class UserServiceTest {
         testUserServiceImpl.setUserDao(this.userDao);
         testUserServiceImpl.setMailSender(this.mailSender);
 
-        UserServiceTx txUserService = new UserServiceTx();
-        txUserService.setTransactionManager(this.transactionManager);
-        txUserService.setUserService(testUserServiceImpl);
+        TransactionHandler txHandelr = new TransactionHandler();
+        txHandelr.setTarget(testUserServiceImpl);
+        txHandelr.setPlatformTransactionManager(this.transactionManager);
+        txHandelr.setPattern("upgradeLevels");
+
+        UserService txUserService = (UserService) Proxy.newProxyInstance(
+                getClass().getClassLoader(),
+                new Class[]{UserService.class},
+                txHandelr
+        );
 
         userDao.deleteAll();
         for (User user : users) {
