@@ -5,6 +5,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import java.lang.reflect.Proxy;
 
+@Deprecated
 public class TxProxyFactoryBean implements FactoryBean<Object> {
     Object target;
     PlatformTransactionManager transactionManager;

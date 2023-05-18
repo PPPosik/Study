@@ -8,6 +8,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+@Deprecated
 public class TransactionHandler implements InvocationHandler {
     private Object target;
     private PlatformTransactionManager transactionManager;
