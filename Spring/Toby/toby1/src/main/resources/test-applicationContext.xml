@@ -26,7 +26,7 @@
         <property name="mailSender" ref="mailSender" />
     </bean>
 
-    <bean id="testUserService" class="book.toby1.user.service.UserServiceTest$TestUserServiceImpl" parent="userService" />
+    <bean id="testUserService" class="book.toby1.user.service.UserServiceTest$TestUserService" parent="userService" />
 
     <bean id="message" class="book.toby1.learningtest.factoryBean.MessageFactoryBean">
         <property name="text" value="Factory Bean" />
@@ -38,9 +38,8 @@
         <property name="transactionManager" ref="transactionManager" />
     </bean>
 
-    <bean id="transactionPointcut" class="book.toby1.user.proxy.NameMatchClassMethodPointcut">
-        <property name="mappedClassName" value="*ServiceImpl" />
-        <property name="mappedName" value="upgrade*" />
+    <bean id="transactionPointcut" class="org.springframework.aop.aspectj.AspectJExpressionPointcut">
+        <property name="expression" value="execution(* *..*ServiceImpl.upgrade*(..))" />
     </bean>
 
     <bean id="transactionAdvisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">

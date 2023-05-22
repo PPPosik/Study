@@ -101,7 +101,7 @@ public class UserServiceTest {
         assertEquals(Level.BASIC, userWithoutLevelRead.getLevel());
     }
 
-    static class TestUserServiceImpl extends UserServiceImpl {
+    static class TestUserService extends UserServiceImpl {
         private String id = "ddd";
 
         @Override
