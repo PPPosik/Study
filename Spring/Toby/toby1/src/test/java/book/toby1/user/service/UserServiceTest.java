@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.TransientDataAccessResourceException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.test.annotation.DirtiesContext;
@@ -112,6 +113,15 @@ public class UserServiceTest {
 
             super.upgradeLevel(user);
         }
+
+        @Override
+        public List<User> getAll() {
+            for (User user : super.getAll()) {
+                super.update(user);
+            }
+
+            return null;
+        }
     }
 
     static class TestUserServiceException extends RuntimeException {
@@ -137,5 +147,11 @@ public class UserServiceTest {
         } else {
             assertEquals(user.getLevel(), userUpdate.getLevel());
         }
+    }
+
+    @Test
+    public void readOnlyTransactionAttribute() {
+        // read only exception
+        assertThrows(TransientDataAccessResourceException.class, testUserService::getAll);
     }
 }

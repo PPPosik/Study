@@ -6,6 +6,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+@Deprecated
 public class TransactionAdvice implements MethodInterceptor {
     PlatformTransactionManager transactionManager;
 
