@@ -18,7 +18,9 @@ import org.springframework.test.annotation.DirtiesContext;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -30,6 +32,7 @@ public class UserDaoJdbcTest {
     //    @Autowired
     private UserDao dao;
     private DataSource dataSource;
+    private Map<String, String> sqlMap;
 
     private User user1;
     private User user2;
@@ -39,7 +42,16 @@ public class UserDaoJdbcTest {
     public void setUp() {
         // test db를 따로 DI 가능
         this.dataSource = new SingleConnectionDataSource("jdbc:mysql://localhost:3306/toby", "root", "mysql", true);
-        dao = new UserDaoJdbc(dataSource);
+
+        sqlMap = new HashMap<>();
+        sqlMap.put("add", "insert into users(id, name, password, email, level, login, recommend) values(?, ?, ?, ?, ?, ?, ?)");
+        sqlMap.put("get", "select * from users where id = ?");
+        sqlMap.put("getAll", "select * from users order by id");
+        sqlMap.put("deleteAll", "delete from users");
+        sqlMap.put("getCount", "select count(*) from users");
+        sqlMap.put("update", "update users set name=?, password=?, email=?, level=?, login=?, recommend=? where id=?");
+
+        dao = new UserDaoJdbc(dataSource, sqlMap);
 
         dao.deleteAll();
 
@@ -65,6 +77,7 @@ public class UserDaoJdbcTest {
 
         ApplicationContext applicationContext = new AnnotationConfigApplicationContext(CountingDaoFactory.class);
         UserDaoJdbc dao = applicationContext.getBean("userDao", UserDaoJdbc.class);
+        dao.setSqlMap(sqlMap);
 
         dao.get("1");
         dao.get("1");

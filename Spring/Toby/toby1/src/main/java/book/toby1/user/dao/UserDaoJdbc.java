@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.Map;
 
 public class UserDaoJdbc implements UserDao {
     private JdbcTemplate jdbcTemplate;
@@ -18,6 +19,7 @@ public class UserDaoJdbc implements UserDao {
             Level.valueOf(rs.getInt("level")),
             rs.getInt("login"),
             rs.getInt("recommend"));
+    private Map<String, String> sqlMap;
 
     public UserDaoJdbc() {
     }
@@ -26,13 +28,22 @@ public class UserDaoJdbc implements UserDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    public UserDaoJdbc(DataSource dataSource, Map<String, String> sqlMap) {
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
+        this.sqlMap = sqlMap;
+    }
+
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    public void setSqlMap(Map<String, String> sqlMap) {
+        this.sqlMap = sqlMap;
+    }
+
     @Override
     public void add(final User user) {
-        this.jdbcTemplate.update("insert into users(id, name, password, email, level, login, recommend) values(?, ?, ?, ?, ?, ?, ?)", user.getId(), user.getName(), user.getPassword(), user.getEmail(), user.getLevel().intValue(), user.getLogin(), user.getRecommend());
+        this.jdbcTemplate.update(sqlMap.get("add"), user.getId(), user.getName(), user.getPassword(), user.getEmail(), user.getLevel().intValue(), user.getLogin(), user.getRecommend());
     }
 
     // 예외를 전환해서 사용
@@ -51,26 +62,26 @@ public class UserDaoJdbc implements UserDao {
 
     @Override
     public User get(String id) {
-        return this.jdbcTemplate.queryForObject("select * from users where id = ?", userMapper, id);
+        return this.jdbcTemplate.queryForObject(sqlMap.get("get"), userMapper, id);
     }
 
     @Override
     public List<User> getAll() {
-        return this.jdbcTemplate.query("select * from users order by id", userMapper);
+        return this.jdbcTemplate.query(sqlMap.get("getAll"), userMapper);
     }
 
     @Override
     public void deleteAll() {
-        this.jdbcTemplate.update("delete from users");
+        this.jdbcTemplate.update(sqlMap.get("deleteAll"));
     }
 
     @Override
     public Integer getCount() {
-        return this.jdbcTemplate.queryForObject("select count(*) from users", Integer.class);
+        return this.jdbcTemplate.queryForObject(sqlMap.get("getCount"), Integer.class);
     }
 
     @Override
     public void update(User user) {
-        this.jdbcTemplate.update("update users set name=?, password=?, email=?, level=?, login=?, recommend=? where id=?", user.getName(), user.getPassword(), user.getEmail(), user.getLevel().intValue(), user.getLogin(), user.getRecommend(), user.getId());
+        this.jdbcTemplate.update(sqlMap.get("update"), user.getName(), user.getPassword(), user.getEmail(), user.getLevel().intValue(), user.getLogin(), user.getRecommend(), user.getId());
     }
 }
