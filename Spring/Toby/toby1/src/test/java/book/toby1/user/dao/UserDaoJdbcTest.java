@@ -3,6 +3,8 @@ package book.toby1.user.dao;
 import book.toby1.user.dao.*;
 import book.toby1.user.domain.Level;
 import book.toby1.user.domain.User;
+import book.toby1.user.sql.SimpleSqlService;
+import book.toby1.user.sql.SqlService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,6 +34,7 @@ public class UserDaoJdbcTest {
     //    @Autowired
     private UserDao dao;
     private DataSource dataSource;
+    private SqlService sqlService;
     private Map<String, String> sqlMap;
 
     private User user1;
@@ -40,9 +43,6 @@ public class UserDaoJdbcTest {
 
     @BeforeEach
     public void setUp() {
-        // test db를 따로 DI 가능
-        this.dataSource = new SingleConnectionDataSource("jdbc:mysql://localhost:3306/toby", "root", "mysql", true);
-
         sqlMap = new HashMap<>();
         sqlMap.put("add", "insert into users(id, name, password, email, level, login, recommend) values(?, ?, ?, ?, ?, ?, ?)");
         sqlMap.put("get", "select * from users where id = ?");
@@ -51,7 +51,10 @@ public class UserDaoJdbcTest {
         sqlMap.put("getCount", "select count(*) from users");
         sqlMap.put("update", "update users set name=?, password=?, email=?, level=?, login=?, recommend=? where id=?");
 
-        dao = new UserDaoJdbc(dataSource, sqlMap);
+        // test db를 따로 DI 가능
+        this.dataSource = new SingleConnectionDataSource("jdbc:mysql://localhost:3306/toby", "root", "mysql", true);
+        this.sqlService = new SimpleSqlService(sqlMap);
+        dao = new UserDaoJdbc(dataSource, sqlService);
 
         dao.deleteAll();
 
@@ -77,7 +80,7 @@ public class UserDaoJdbcTest {
 
         ApplicationContext applicationContext = new AnnotationConfigApplicationContext(CountingDaoFactory.class);
         UserDaoJdbc dao = applicationContext.getBean("userDao", UserDaoJdbc.class);
-        dao.setSqlMap(sqlMap);
+        dao.setSqlService(sqlService);
 
         dao.get("1");
         dao.get("1");

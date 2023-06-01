@@ -2,12 +2,12 @@ package book.toby1.user.dao;
 
 import book.toby1.user.domain.Level;
 import book.toby1.user.domain.User;
+import book.toby1.user.sql.SqlService;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 import javax.sql.DataSource;
 import java.util.List;
-import java.util.Map;
 
 public class UserDaoJdbc implements UserDao {
     private JdbcTemplate jdbcTemplate;
@@ -19,7 +19,7 @@ public class UserDaoJdbc implements UserDao {
             Level.valueOf(rs.getInt("level")),
             rs.getInt("login"),
             rs.getInt("recommend"));
-    private Map<String, String> sqlMap;
+    private SqlService sqlService;
 
     public UserDaoJdbc() {
     }
@@ -28,22 +28,22 @@ public class UserDaoJdbc implements UserDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    public UserDaoJdbc(DataSource dataSource, Map<String, String> sqlMap) {
+    public UserDaoJdbc(DataSource dataSource, SqlService sqlService) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
-        this.sqlMap = sqlMap;
+        this.sqlService = sqlService;
     }
 
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    public void setSqlMap(Map<String, String> sqlMap) {
-        this.sqlMap = sqlMap;
+    public void setSqlService(SqlService sqlService) {
+        this.sqlService = sqlService;
     }
 
     @Override
     public void add(final User user) {
-        this.jdbcTemplate.update(sqlMap.get("add"), user.getId(), user.getName(), user.getPassword(), user.getEmail(), user.getLevel().intValue(), user.getLogin(), user.getRecommend());
+        this.jdbcTemplate.update(sqlService.getSql("add"), user.getId(), user.getName(), user.getPassword(), user.getEmail(), user.getLevel().intValue(), user.getLogin(), user.getRecommend());
     }
 
     // 예외를 전환해서 사용
@@ -62,26 +62,26 @@ public class UserDaoJdbc implements UserDao {
 
     @Override
     public User get(String id) {
-        return this.jdbcTemplate.queryForObject(sqlMap.get("get"), userMapper, id);
+        return this.jdbcTemplate.queryForObject(sqlService.getSql("get"), userMapper, id);
     }
 
     @Override
     public List<User> getAll() {
-        return this.jdbcTemplate.query(sqlMap.get("getAll"), userMapper);
+        return this.jdbcTemplate.query(sqlService.getSql("getAll"), userMapper);
     }
 
     @Override
     public void deleteAll() {
-        this.jdbcTemplate.update(sqlMap.get("deleteAll"));
+        this.jdbcTemplate.update(sqlService.getSql("deleteAll"));
     }
 
     @Override
     public Integer getCount() {
-        return this.jdbcTemplate.queryForObject(sqlMap.get("getCount"), Integer.class);
+        return this.jdbcTemplate.queryForObject(sqlService.getSql("getCount"), Integer.class);
     }
 
     @Override
     public void update(User user) {
-        this.jdbcTemplate.update(sqlMap.get("update"), user.getName(), user.getPassword(), user.getEmail(), user.getLevel().intValue(), user.getLogin(), user.getRecommend(), user.getId());
+        this.jdbcTemplate.update(sqlService.getSql("update"), user.getName(), user.getPassword(), user.getEmail(), user.getLevel().intValue(), user.getLogin(), user.getRecommend(), user.getId());
     }
 }
