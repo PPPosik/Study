@@ -1,5 +1,6 @@
 package book.toby1.learningtest;
 
+import book.toby1.TestApplicationContext;
 import book.toby1.learningtest.factoryBean.Message;
 import book.toby1.learningtest.factoryBean.MessageFactoryBean;
 import book.toby1.learningtest.proxy.Hello;
@@ -20,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "/test-applicationContext.xml")
+@ContextConfiguration(classes = TestApplicationContext.class)
 public class FactoryBeanTest {
     @Autowired
     ApplicationContext context;

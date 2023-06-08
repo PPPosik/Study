@@ -1,6 +1,6 @@
 package book.toby1.user.dao;
 
-import book.toby1.user.dao.*;
+import book.toby1.TestApplicationContext;
 import book.toby1.user.domain.Level;
 import book.toby1.user.domain.User;
 import book.toby1.user.sql.SimpleSqlService;
@@ -11,12 +11,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 //@SpringBootTest
-//@ContextConfiguration(locations = "/test-applicationContext.xml")
+@ContextConfiguration(classes = TestApplicationContext.class)
 @DirtiesContext
 public class UserDaoJdbcTest {
     //    @Autowired

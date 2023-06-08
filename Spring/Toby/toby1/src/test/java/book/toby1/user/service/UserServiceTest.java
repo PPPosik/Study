@@ -1,5 +1,6 @@
 package book.toby1.user.service;
 
+import book.toby1.TestApplicationContext;
 import book.toby1.user.dao.UserDao;
 import book.toby1.user.domain.Level;
 import book.toby1.user.domain.User;
@@ -27,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "/test-applicationContext.xml")
+@ContextConfiguration(classes = TestApplicationContext.class)
 public class UserServiceTest {
     @Autowired
     private PlatformTransactionManager transactionManager;
@@ -109,7 +110,7 @@ public class UserServiceTest {
         assertEquals(Level.BASIC, userWithoutLevelRead.getLevel());
     }
 
-    static class TestUserService extends UserServiceImpl {
+    public static class TestUserService extends UserServiceImpl {
         private String id = "ddd";
 
         @Override
