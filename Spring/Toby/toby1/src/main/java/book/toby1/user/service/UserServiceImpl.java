@@ -3,16 +3,22 @@ package book.toby1.user.service;
 import book.toby1.user.dao.UserDao;
 import book.toby1.user.domain.Level;
 import book.toby1.user.domain.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service("userService")
 public class UserServiceImpl implements UserService {
     public static final int MIN_LOGCOUNT_FOR_SILVER = 50;
     public static final int MIN_RECCOMEND_FOR_GOLD = 30;
 
+    @Autowired
     private UserDao userDao;
+
+    @Autowired
     private MailSender mailSender;
 
     public void setUserDao(UserDao userDao) {

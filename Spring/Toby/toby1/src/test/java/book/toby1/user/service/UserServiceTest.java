@@ -1,5 +1,6 @@
 package book.toby1.user.service;
 
+import book.toby1.AppContext;
 import book.toby1.TestApplicationContext;
 import book.toby1.user.dao.UserDao;
 import book.toby1.user.domain.Level;
@@ -13,6 +14,7 @@ import org.springframework.dao.TransientDataAccessResourceException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -28,7 +30,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = TestApplicationContext.class)
+@ActiveProfiles("test")
+@ContextConfiguration(classes = { TestApplicationContext.class, AppContext.class })
 public class UserServiceTest {
     @Autowired
     private PlatformTransactionManager transactionManager;

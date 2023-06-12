@@ -1,5 +1,6 @@
 package book.toby1.learningtest;
 
+import book.toby1.AppContext;
 import book.toby1.TestApplicationContext;
 import book.toby1.learningtest.factoryBean.Message;
 import book.toby1.learningtest.factoryBean.MessageFactoryBean;
@@ -14,6 +15,7 @@ import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.aop.support.NameMatchMethodPointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -21,7 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = TestApplicationContext.class)
+@ActiveProfiles("test")
+@ContextConfiguration(classes = { TestApplicationContext.class, AppContext.class })
 public class FactoryBeanTest {
     @Autowired
     ApplicationContext context;

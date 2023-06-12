@@ -3,12 +3,16 @@ package book.toby1.user.dao;
 import book.toby1.user.domain.Level;
 import book.toby1.user.domain.User;
 import book.toby1.user.sql.SqlService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.List;
 
+@Repository
 public class UserDaoJdbc implements UserDao {
     private JdbcTemplate jdbcTemplate;
     private final RowMapper<User> userMapper = (rs, rowNum) -> new User(
@@ -33,10 +37,12 @@ public class UserDaoJdbc implements UserDao {
         this.sqlService = sqlService;
     }
 
+    @Autowired
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    @Autowired
     public void setSqlService(SqlService sqlService) {
         this.sqlService = sqlService;
     }
