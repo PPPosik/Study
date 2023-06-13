@@ -1,5 +1,6 @@
 package book.toby1;
 
+import book.toby1.user.annotation.EnableSqlService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
@@ -12,8 +13,9 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableTransactionManagement
+@EnableSqlService
 @ComponentScan(basePackages = "book.toby1.user")
-@Import({ SqlServiceContext.class, ProductionAppContext.class})
+@Import({ ProductionAppContext.class })
 @PropertySource("classpath:/database.properties")
 public class AppContext {
     @Value("${db.driverClass}")
