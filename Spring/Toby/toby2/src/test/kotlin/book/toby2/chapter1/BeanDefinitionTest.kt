@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.config.RuntimeBeanReference
 import org.springframework.beans.factory.support.RootBeanDefinition
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader
+import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.support.GenericApplicationContext
 import org.springframework.context.support.GenericXmlApplicationContext
 import org.springframework.context.support.StaticApplicationContext
@@ -71,5 +72,32 @@ class BeanDefinitionTest {
 
         assertEquals(hello.printer, ac.getBean("printer"))
         assertEquals("Hello Spring", ac.getBean("printer").toString())
+    }
+
+    @Test
+    fun `Parent Child Context test`() {
+        val parent = GenericXmlApplicationContext("parentContext.xml")
+        val child = GenericApplicationContext(parent)
+        val reader = XmlBeanDefinitionReader(child);
+
+        reader.loadBeanDefinitions("childContext.xml")
+        child.refresh()
+
+        val hello = child.getBean("hello", Hello::class.java)
+        val printer = child.getBean("printer", Printer::class.java)
+        hello.print()
+
+        assertNotNull(hello)
+        assertNotNull(printer)
+        assertEquals("Hello Child", printer.toString())
+    }
+
+    @Test
+    fun `AnnotationConfigApplicationContext test`() {
+        val ctx = AnnotationConfigApplicationContext("book.toby2.chapter1")
+        val hello = ctx.getBean("annotatedHello", AnnotatedHello::class.java)
+
+        assertNotNull(hello)
+        assertEquals("hello", hello.sayHello())
     }
 }
