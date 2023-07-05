@@ -100,4 +100,20 @@ class BeanDefinitionTest {
         assertNotNull(hello)
         assertEquals("hello", hello.sayHello())
     }
+
+    @Test
+    fun `Configuration test`() {
+        val ctx = AnnotationConfigApplicationContext(AnnotatedHelloConfig::class.java)
+        val helloConfig = ctx.getBean("annotatedHelloConfig", AnnotatedHelloConfig::class.java)
+        val hello = ctx.getBean("annotatedHelloByConfig", AnnotatedHello::class.java)
+
+        assertNotNull(helloConfig)
+        assertNotNull(hello)
+        assertEquals("hello", hello.sayHello())
+        assertEquals(hello, helloConfig.annotatedHelloByConfig())
+
+        val helloByConfig2 = AnnotatedHelloConfig().annotatedHelloByConfig()
+        val hello2 = AnnotatedHello()
+        assertNotEquals(helloByConfig2, hello2)
+    }
 }
