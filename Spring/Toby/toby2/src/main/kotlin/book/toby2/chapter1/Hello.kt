@@ -1,10 +1,14 @@
 package book.toby2.chapter1
 
+import org.springframework.beans.factory.annotation.Value
+
 class Hello(
-    var name: String,
     var printer: Printer
 ) {
-    constructor() : this("default", ConsolePrinter())
+    @Value("pposik")
+    var name: String = ""
+
+    constructor() : this(ConsolePrinter())
 
     fun sayHello() = "Hello $name"
 
